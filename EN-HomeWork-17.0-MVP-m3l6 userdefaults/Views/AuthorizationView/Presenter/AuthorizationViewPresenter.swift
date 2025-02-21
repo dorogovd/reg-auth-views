@@ -19,6 +19,8 @@ class AuthorizationViewPresenter: AuthorizationViewPresenterProtocol {
     
     let keychain = KeychainSwift()
     
+    private var fbManager = FBManager()
+    
     init(view: AuthorizationViewProtocol?) {
         self.view = view
     }
@@ -31,17 +33,22 @@ class AuthorizationViewPresenter: AuthorizationViewPresenterProtocol {
         // Получение сохранённых значений из UserDefaults и Keychain
         let savedEmail = UserDefaults.standard.string(forKey: "email")
         let savedPassword = keychain.get("password")
+        let userData = UserData(email: email, password: password, name: nil, surname: nil)
         
         // Проверка совпадения
         if email == savedEmail && password == savedPassword {
-            // Перемещаем на главный экран
-            UserDefaults.standard.set(true, forKey: "isLogin") // Сохраняем статус логина
-            NotificationCenter.default.post(name: .changeRootViewController, object: nil, userInfo: ["vc": VCs.main])
+            fbManager.authUser(user: userData) { isLogin in
+                if isLogin {
+                    // Перемещаем на главный экран
+                    NotificationCenter.default.post(name: .changeRootViewController, object: nil, userInfo: ["vc": VCs.main])
+                } else {
+                    print("error")
+                }
+                print(savedPassword ?? "unknown password")
+                print(savedEmail ?? "unknown email")
+            }
         } else {
-            // Сообщаем об ошибке через протокол
             print("Invalid email or password. Please try again.")
         }
-        print(savedPassword)
-        print(savedEmail)
     }
 }

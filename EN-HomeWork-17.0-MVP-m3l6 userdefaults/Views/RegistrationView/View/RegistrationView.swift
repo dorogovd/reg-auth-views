@@ -42,15 +42,7 @@ class RegistrationView: UIViewController, RegistrationViewProtocol, UITextFieldD
                return
            }
         
-        self.presenter.saveRegistrationData(
-            name: name,
-            surname: surname,
-            email: email,
-            password: password,
-            isRegistered: true,
-            isLogin: true
-        )
-        print(self.presenter.name)
+        self.presenter.regUser(name: name, surname: surname, email: email, password: password, isRegistered: true)
     }
 
     private lazy var loginButton: UIButton = {
