@@ -15,7 +15,7 @@ class MainView: UIViewController, MainViewProtocol {
     var presenter: MainViewPresenterProtocol!
     
     private lazy var titleLabel: UILabel = {
-        $0.text = "Placeholder Placeholder"
+        $0.text = presenter.getUserName()
         $0.font = UIFont.boldSystemFont(ofSize: 24)
         $0.textColor = .black
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -40,7 +40,7 @@ class MainView: UIViewController, MainViewProtocol {
         setupUI()
         
         // Запрашиваем имя пользователя и обновляем label
-        presenter.getUserName { [weak self] fullName in
+        presenter.updateUserName { [weak self] fullName in
             DispatchQueue.main.async {
                 self?.titleLabel.text = fullName
             }

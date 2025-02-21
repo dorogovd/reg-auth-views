@@ -11,7 +11,8 @@ import FirebaseFirestore
 
 protocol MainViewPresenterProtocol: AnyObject {
     func logOut()
-    func getUserName(completion: @escaping (String) -> Void)
+    func updateUserName(completion: @escaping (String) -> Void)
+    func getUserName() -> String?
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
@@ -29,17 +30,19 @@ class MainViewPresenter: MainViewPresenterProtocol {
         NotificationCenter.default.post(name: .changeRootViewController, object: nil, userInfo: ["vc": VCs.authorization])
     }
     
-    func getUserName(completion: @escaping (String) -> Void) {
-        //        let name = UserDefaults.standard.string(forKey: "name") ?? "Unknown"
-        //        let surname = UserDefaults.standard.string(forKey: "surname") ?? "User"
-        //        return "\(name) \(surname)"
+    func getUserName() -> String? {
+                let name = UserDefaults.standard.string(forKey: "name") ?? "Unknown"
+                let surname = UserDefaults.standard.string(forKey: "surname") ?? "User"
+                return "\(name) \(surname)"
+    }
+    
+    func updateUserName(completion: @escaping (String) -> Void) {
         // Получаем UID текущего пользователя (убедись, что FirebaseApp настроен, и пользователь авторизован)
         guard let uid = Auth.auth().currentUser?.uid else {
             completion("Unknown User")
             return
         }
         // Выполняем запрос к Firestore для получения данных пользователя
-        
         Firestore.firestore().collection("users").document(uid).getDocument { data, error in
             if let error = error {
                 print("error: \(error)")

@@ -12,7 +12,6 @@ protocol RegistrationViewPresenterProtocol: AnyObject {
     var name: String? { get }
     var surname: String? { get }
     var isRegistered: Bool { get }
-   // var isLogin: Bool { get }
     var email: String? { get }
     func logIn()
     func regUser(name: String, surname: String, email: String, password: String, isRegistered: Bool)
@@ -30,7 +29,6 @@ class RegistrationViewPresenter: RegistrationViewPresenterProtocol {
     var name = UserDefaults.standard.string(forKey: "name")
     var surname = UserDefaults.standard.string(forKey: "surname")
     var isRegistered = UserDefaults.standard.bool(forKey: "isRegistered")
-   // var isLogin = UserDefaults.standard.bool(forKey: "isLogin")
     var email = UserDefaults.standard.string(forKey: "email")
     
     init(view: RegistrationViewProtocol?) {
